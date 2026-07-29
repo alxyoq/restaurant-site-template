@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Gallery beverage photo placeholder">
+  <rect width="1200" height="800" fill="#a8663f"/>
+  <path d="M440 160h320l-35 430H475Z" fill="#fff8ee"/>
+  <path d="M495 340h210l-18 200H513Z" fill="#ddb66f"/>
+  <path d="m610 160 80-110" stroke="#536a57" stroke-width="30" stroke-linecap="round"/>
+  <text x="600" y="710" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#fff8ee">REPLACE: DRINK / DESSERT</text>
+</svg>

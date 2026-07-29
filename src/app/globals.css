@@ -1,0 +1,73 @@
+@import "../styles/theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-brand-surface text-brand-ink font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-primary ring-offset-2;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.55s ease-out forwards;
+}
+
+@layer components {
+  .site-container {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex min-h-11 items-center justify-center rounded-full bg-brand-primary px-5 py-2.5 font-semibold text-white transition-colors hover:bg-brand-primary-dark;
+  }
+
+  .btn-outline {
+    @apply inline-flex min-h-11 items-center justify-center rounded-full border border-brand-primary px-5 py-2.5 font-semibold text-brand-primary transition-colors hover:bg-brand-primary hover:text-white;
+  }
+
+  .page-heading {
+    @apply text-center text-4xl text-brand-primary md:text-5xl;
+  }
+
+  .page-intro {
+    @apply mx-auto mt-5 max-w-3xl text-center text-lg leading-8 text-brand-secondary;
+  }
+
+  .content-card {
+    @apply rounded-2xl bg-white shadow-soft;
+  }
+}

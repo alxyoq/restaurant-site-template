@@ -1,0 +1,19 @@
+:root {
+  /*
+   * BRAND COLORS
+   * Change these six values to rebrand the entire site.
+   */
+  --color-primary: #a8663f;
+  --color-primary-dark: #874d2e;
+  --color-secondary: #536a57;
+  --color-accent: #ddb66f;
+  --color-surface: #fff8ee;
+  --color-ink: #29231f;
+
+  /*
+   * TYPOGRAPHY
+   * Replace these stacks or load licensed web fonts in src/app/layout.tsx.
+   */
+  --font-body: Arial, Helvetica, sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+}

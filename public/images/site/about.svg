@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="About photo placeholder">
+  <rect width="1200" height="800" fill="#e8ddca"/>
+  <rect x="120" y="110" width="960" height="580" rx="36" fill="#536a57"/>
+  <circle cx="350" cy="380" r="145" fill="#ddb66f"/>
+  <path d="M610 250h330M610 340h250M610 430h300" stroke="#fff8ee" stroke-width="28" stroke-linecap="round" opacity=".85"/>
+  <text x="600" y="635" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#fff8ee">REPLACE: ABOUT / INTERIOR PHOTO</text>
+</svg>

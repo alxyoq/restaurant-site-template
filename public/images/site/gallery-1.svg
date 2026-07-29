@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Gallery food photo placeholder">
+  <rect width="1200" height="900" fill="#536a57"/>
+  <circle cx="600" cy="410" r="300" fill="#fff8ee"/>
+  <circle cx="600" cy="410" r="215" fill="#ddb66f"/>
+  <text x="600" y="800" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#fff8ee">REPLACE: FOOD PHOTO</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Exterior photo placeholder">
+  <rect width="1200" height="800" fill="#dbe4db"/>
+  <rect y="600" width="1200" height="200" fill="#536a57"/>
+  <path d="M230 360 600 120l370 240v270H230Z" fill="#fff8ee" stroke="#a8663f" stroke-width="22"/>
+  <rect x="510" y="410" width="180" height="220" fill="#a8663f"/>
+  <rect x="310" y="420" width="130" height="110" fill="#ddb66f"/>
+  <rect x="760" y="420" width="130" height="110" fill="#ddb66f"/>
+  <text x="600" y="735" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#fff8ee">REPLACE: RESTAURANT EXTERIOR</text>
+</svg>

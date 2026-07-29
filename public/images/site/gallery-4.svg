@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100" role="img" aria-label="Gallery team photo placeholder">
+  <rect width="900" height="1100" fill="#536a57"/>
+  <circle cx="300" cy="390" r="130" fill="#ddb66f"/>
+  <circle cx="600" cy="390" r="130" fill="#fff8ee"/>
+  <path d="M110 850c40-220 330-220 380 0M410 850c40-220 330-220 380 0" fill="#a8663f"/>
+  <text x="450" y="1010" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#fff8ee">REPLACE: TEAM PHOTO</text>
+</svg>

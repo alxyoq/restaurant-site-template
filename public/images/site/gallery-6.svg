@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Gallery exterior photo placeholder">
+  <rect width="1200" height="800" fill="#dbe4db"/>
+  <path d="M190 400 600 120l410 280v260H190Z" fill="#fff8ee" stroke="#536a57" stroke-width="24"/>
+  <rect x="520" y="430" width="160" height="230" fill="#a8663f"/>
+  <text x="600" y="750" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#29231f">REPLACE: EXTERIOR PHOTO</text>
+</svg>

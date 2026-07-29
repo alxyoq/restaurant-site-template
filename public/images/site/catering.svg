@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-label="Catering photo placeholder">
+  <rect width="1200" height="700" fill="#536a57"/>
+  <circle cx="230" cy="160" r="180" fill="#ddb66f" opacity=".65"/>
+  <path d="M180 510h840M280 510V330h640v180" stroke="#fff8ee" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="450" cy="410" r="66" fill="#a8663f"/>
+  <circle cx="600" cy="410" r="66" fill="#ddb66f"/>
+  <circle cx="750" cy="410" r="66" fill="#a8663f"/>
+  <text x="600" y="620" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#fff8ee">REPLACE: CATERING / EVENT PHOTO</text>
+</svg>

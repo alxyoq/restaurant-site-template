@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Social sharing image placeholder</title>
+  <desc id="description">Replace this file with a branded 1200 by 630 social card.</desc>
+  <rect width="1200" height="630" fill="#fff8ee"/>
+  <circle cx="1030" cy="90" r="260" fill="#ddb66f" opacity=".55"/>
+  <circle cx="1090" cy="610" r="360" fill="#536a57" opacity=".9"/>
+  <path d="M0 520C220 420 360 620 620 500S980 360 1200 440V630H0Z" fill="#a8663f"/>
+  <text x="90" y="240" font-family="Georgia, serif" font-size="72" font-weight="700" fill="#29231f">RESTAURANT NAME</text>
+  <text x="94" y="302" font-family="Arial, sans-serif" font-size="27" letter-spacing="8" fill="#536a57">REPLACE SOCIAL CARD</text>
+</svg>

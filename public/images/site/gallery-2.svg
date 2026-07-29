@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-label="Gallery interior photo placeholder">
+  <rect width="900" height="1200" fill="#e8ddca"/>
+  <rect x="110" y="130" width="680" height="850" rx="40" fill="#a8663f"/>
+  <path d="M210 820V430h480v390M330 820V560h240v260" stroke="#fff8ee" stroke-width="34"/>
+  <text x="450" y="1080" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#29231f">REPLACE: INTERIOR PHOTO</text>
+</svg>
