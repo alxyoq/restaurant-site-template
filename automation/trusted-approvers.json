@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "productionAutomationEnabled": false,
+  "keys": [
+    {
+      "keyId": "fixture-approver-2026",
+      "algorithm": "ed25519",
+      "scope": "fixture",
+      "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAV9gNhrGKb0lbCNvc8YMJNz6xOTDjw9XjMRLH6++7bYs=\n-----END PUBLIC KEY-----\n"
+    }
+  ]
+}

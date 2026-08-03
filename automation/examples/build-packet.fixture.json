@@ -1,0 +1,296 @@
+{
+  "schemaVersion": "1.0.0",
+  "packetType": "fixture",
+  "packetId": "00000000-0000-4000-8000-000000000001",
+  "createdAt": "2026-08-03T20:00:00Z",
+  "approvedPayload": {
+    "candidate": {
+      "candidateId": "00000000-0000-4000-8000-000000000002",
+      "rank": 1,
+      "searchRunId": "fixture-run",
+      "searchArea": {
+        "label": "Schema fixture area",
+        "center": {
+          "city": "Fixtureville",
+          "region": "New Jersey",
+          "countryCode": "US"
+        },
+        "radiusMiles": 10
+      },
+      "selectionScore": 80,
+      "selectionReasons": [
+        {
+          "reason": "Fixture evidence marks the record as an operating independent restaurant without a valid website.",
+          "evidenceRefs": ["ev-fixture-listing", "ev-fixture-search"]
+        }
+      ]
+    },
+    "template": {
+      "repository": "alxyoq/restaurant-site-template",
+      "baseCommitSha": "a7e94309bc809a04e86e36c8ff5f85faff3291bf",
+      "branchName": "agent/fixture-restaurant-preview",
+      "outputRepositoryName": "fixture-kitchen-preview",
+      "pullRequestMode": "draft",
+      "packageManager": "npm",
+      "hostingProvider": "netlify"
+    },
+    "executionPolicy": {
+      "artifactPurpose": "schema_validation_fixture",
+      "defaultBranchWriteAllowed": false,
+      "mergeAllowed": false,
+      "deployPreviewAllowed": false,
+      "productionDeployAllowed": false,
+      "publicLaunchAllowed": false,
+      "previewVisibility": "unlisted",
+      "searchIndexing": "noindex_nofollow_noarchive",
+      "contactFormEnabled": false,
+      "newsletterEnabled": false,
+      "paymentConfigurationAllowed": false,
+      "customerContactAllowed": false,
+      "productionDomain": null,
+      "requiresSeparateLaunchApproval": true
+    },
+    "evidence": [
+      {
+        "evidenceId": "ev-fixture-listing",
+        "kind": "web_capture",
+        "support": "direct",
+        "sourceClass": "map_directory",
+        "url": "https://records.invalid/fixture-kitchen",
+        "title": "Fixture Kitchen record",
+        "publisher": "Fixture Records",
+        "accessedAt": "2026-08-03T19:00:00Z",
+        "locator": "Synthetic listing fields",
+        "observation": "Synthetic evidence used only to exercise the packet schema and validator.",
+        "captureSha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      {
+        "evidenceId": "ev-fixture-search",
+        "kind": "web_capture",
+        "support": "direct",
+        "sourceClass": "third_party",
+        "url": "https://search.invalid/fixture-kitchen",
+        "title": "Fixture Kitchen website search",
+        "publisher": "Fixture Search",
+        "accessedAt": "2026-08-03T19:05:00Z",
+        "locator": "Synthetic search results",
+        "observation": "A second synthetic source records that no official website was confirmed for the fixture.",
+        "captureSha256": "2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    ],
+    "business": {
+      "displayName": {
+        "factId": "fact-display-name",
+        "state": "verified",
+        "value": "Fixture Kitchen",
+        "evidenceRefs": ["ev-fixture-listing"],
+        "verifiedAt": "2026-08-03T19:00:00Z"
+      },
+      "legalName": {
+        "factId": "fact-legal-name",
+        "state": "not_found",
+        "value": null,
+        "reasonCode": "not_found_after_search",
+        "reason": "The synthetic fixture omits a legal name.",
+        "evidenceRefs": ["ev-fixture-listing"]
+      },
+      "category": {
+        "factId": "fact-category",
+        "state": "verified",
+        "value": "Restaurant",
+        "evidenceRefs": ["ev-fixture-listing"],
+        "verifiedAt": "2026-08-03T19:00:00Z"
+      },
+      "operatingStatus": {
+        "factId": "fact-operating-status",
+        "state": "verified",
+        "value": "operating",
+        "evidenceRefs": ["ev-fixture-listing"],
+        "verifiedAt": "2026-08-03T19:00:00Z"
+      },
+      "ownership": {
+        "factId": "fact-ownership",
+        "state": "verified",
+        "value": "independent",
+        "evidenceRefs": ["ev-fixture-listing"],
+        "verifiedAt": "2026-08-03T19:00:00Z"
+      },
+      "websiteAssessment": {
+        "factId": "fact-website-assessment",
+        "state": "verified",
+        "value": "none_confirmed",
+        "evidenceRefs": ["ev-fixture-listing", "ev-fixture-search"],
+        "verifiedAt": "2026-08-03T19:00:00Z",
+        "checkedAt": "2026-08-03T19:00:00Z"
+      }
+    },
+    "contact": {
+      "phone": {
+        "factId": "fact-phone",
+        "state": "not_found",
+        "value": null,
+        "reasonCode": "not_found_after_search",
+        "reason": "The synthetic fixture omits a phone number.",
+        "evidenceRefs": ["ev-fixture-listing"]
+      },
+      "email": {
+        "factId": "fact-email",
+        "state": "not_found",
+        "value": null,
+        "reasonCode": "not_found_after_search",
+        "reason": "The synthetic fixture omits an email address.",
+        "evidenceRefs": ["ev-fixture-listing"]
+      },
+      "orderingUrl": {
+        "factId": "fact-ordering-url",
+        "state": "not_found",
+        "value": null,
+        "reasonCode": "not_found_after_search",
+        "reason": "The synthetic fixture omits an ordering URL.",
+        "evidenceRefs": ["ev-fixture-listing"]
+      },
+      "reservationUrl": {
+        "factId": "fact-reservation-url",
+        "state": "not_found",
+        "value": null,
+        "reasonCode": "not_found_after_search",
+        "reason": "The synthetic fixture omits a reservation URL.",
+        "evidenceRefs": ["ev-fixture-listing"]
+      }
+    },
+    "location": {
+      "primaryAddress": {
+        "factId": "fact-primary-address",
+        "state": "verified",
+        "value": {
+          "addressLine1": "1 Fixture Way",
+          "city": "Fixtureville",
+          "region": "NJ",
+          "postalCode": "00000",
+          "countryCode": "US"
+        },
+        "evidenceRefs": ["ev-fixture-listing"],
+        "verifiedAt": "2026-08-03T19:00:00Z"
+      },
+      "coordinates": {
+        "factId": "fact-coordinates",
+        "state": "not_found",
+        "value": null,
+        "reasonCode": "not_found_after_search",
+        "reason": "The synthetic fixture omits coordinates.",
+        "evidenceRefs": ["ev-fixture-listing"]
+      },
+      "weeklyHours": {
+        "factId": "fact-weekly-hours",
+        "state": "not_found",
+        "value": null,
+        "reasonCode": "not_found_after_search",
+        "reason": "The synthetic fixture omits operating hours.",
+        "evidenceRefs": ["ev-fixture-listing"]
+      }
+    },
+    "branding": {
+      "observedBrandName": {
+        "factId": "fact-observed-brand-name",
+        "state": "verified",
+        "value": "Fixture Kitchen",
+        "evidenceRefs": ["ev-fixture-listing"],
+        "verifiedAt": "2026-08-03T19:00:00Z"
+      },
+      "observedPalette": {
+        "factId": "fact-observed-palette",
+        "state": "not_found",
+        "value": null,
+        "reasonCode": "not_found_after_search",
+        "reason": "The synthetic fixture does not define existing brand colors.",
+        "evidenceRefs": ["ev-fixture-listing"]
+      },
+      "creativeDirection": {
+        "basis": "human_approved_original",
+        "palette": ["#263238", "#C56A3D", "#F5F0E8"],
+        "mood": ["warm", "straightforward"],
+        "typography": "Readable serif headings with a neutral sans-serif body.",
+        "rationale": "Synthetic creative direction used to validate the approved-payload envelope."
+      }
+    },
+    "content": {
+      "approvedClaims": [
+        {
+          "claimId": "claim-fixture-identity",
+          "claimType": "identity",
+          "text": "Fixture Kitchen is a restaurant in Fixtureville.",
+          "basisFactIds": [
+            "fact-display-name",
+            "fact-category",
+            "fact-primary-address"
+          ]
+        }
+      ],
+      "creativeCopyRules": {
+        "allowGenericInvitations": true,
+        "disallowUnsupportedSuperlatives": true,
+        "omitUnknownFacts": true
+      }
+    },
+    "social": [],
+    "menu": {
+      "state": "not_found",
+      "reasonCode": "not_found_after_search",
+      "reason": "The synthetic fixture intentionally includes no menu.",
+      "evidenceRefs": ["ev-fixture-listing"]
+    },
+    "reviews": {
+      "state": "not_approved",
+      "reasonCode": "rights_not_confirmed",
+      "reason": "The synthetic fixture intentionally includes no review excerpts.",
+      "evidenceRefs": ["ev-fixture-listing"]
+    },
+    "assets": [],
+    "unresolved": [
+      {
+        "fieldPath": "/contact/phone",
+        "reason": "Synthetic fixture value is deliberately unknown."
+      },
+      {
+        "fieldPath": "/contact/email",
+        "reason": "Synthetic fixture value is deliberately unknown."
+      },
+      {
+        "fieldPath": "/location/weeklyHours",
+        "reason": "Synthetic fixture value is deliberately unknown."
+      }
+    ],
+    "sitePlan": {
+      "pages": {
+        "home": true,
+        "contact": true,
+        "menu": false,
+        "reviews": false,
+        "gallery": false,
+        "catering": false
+      },
+      "features": {
+        "orderingCta": false,
+        "reservationCta": false,
+        "contactForm": false,
+        "newsletter": false
+      }
+    }
+  },
+  "approval": {
+    "status": "fixture_only",
+    "actor": {
+      "kind": "fixture",
+      "subjectId": "fixture-reviewer",
+      "displayName": "Fixture Reviewer"
+    },
+    "approvalEventId": "00000000-0000-4000-8000-000000000003",
+    "approvalEventReference": "urn:fixture:approval:00000000-0000-4000-8000-000000000003",
+    "approvedAt": "2026-08-03T20:00:00Z",
+    "reviewedEvidenceIds": ["ev-fixture-listing", "ev-fixture-search"],
+    "approvedPayloadSha256": "b253cb54a7a3661a83de2a94d39520c2463520c8c0924b9acbf248c16421c178",
+    "signatureAlgorithm": "ed25519",
+    "signingKeyId": "fixture-approver-2026",
+    "approvalSignature": "KI1PbDCtXB2UkoK7z5WqX85roITa3FrZwjr7JwZFU6YCXHC3pYc3egfAbRFU3K/EJA5wWUN0RQvRjN7NEf88AA=="
+  }
+}

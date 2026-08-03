@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import previewPolicy from "@/config/preview-policy.json";
 import { siteConfig } from "@/config/site";
 import { homeContent } from "@/content/home";
 
@@ -34,7 +35,9 @@ export default function FeaturedSections() {
               {label}
             </Link>
           ))}
-          {siteConfig.ordering.enabled && siteConfig.ordering.url ? (
+          {previewPolicy.orderingEnabled &&
+          siteConfig.ordering.enabled &&
+          siteConfig.ordering.url ? (
             <a
               href={siteConfig.ordering.url}
               target="_blank"

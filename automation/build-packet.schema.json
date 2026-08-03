@@ -1,0 +1,1982 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:bold-solutions:restaurant-approved-build-packet:1.0.0",
+  "title": "Approved restaurant draft build packet",
+  "description": "Tamper-evident authority for one unpublished Netlify restaurant preview.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packetType",
+    "packetId",
+    "createdAt",
+    "approvedPayload",
+    "approval"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "packetType": {
+      "enum": ["approved_draft_build", "fixture"]
+    },
+    "packetId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approvedPayload": {
+      "$ref": "#/$defs/approvedPayload"
+    },
+    "approval": {
+      "$ref": "#/$defs/approval"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "packetType": {
+            "const": "fixture"
+          }
+        },
+        "required": ["packetType"]
+      },
+      "then": {
+        "properties": {
+          "approvedPayload": {
+            "type": "object",
+            "properties": {
+              "executionPolicy": {
+                "type": "object",
+                "properties": {
+                  "artifactPurpose": {
+                    "const": "schema_validation_fixture"
+                  },
+                  "deployPreviewAllowed": {
+                    "const": false
+                  }
+                }
+              }
+            }
+          },
+          "approval": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "const": "fixture_only"
+              },
+              "actor": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "fixture"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "approvedPayload": {
+            "type": "object",
+            "properties": {
+              "executionPolicy": {
+                "type": "object",
+                "properties": {
+                  "artifactPurpose": {
+                    "const": "unpublished_sales_preview"
+                  },
+                  "deployPreviewAllowed": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          },
+          "approval": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "const": "approved_for_draft_build"
+              },
+              "actor": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "human"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "minLength": 3,
+      "maxLength": 96
+    },
+    "factId": {
+      "type": "string",
+      "pattern": "^fact-[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 6,
+      "maxLength": 96
+    },
+    "evidenceId": {
+      "type": "string",
+      "pattern": "^ev-[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 5,
+      "maxLength": 96
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "httpsUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://",
+      "maxLength": 2048
+    },
+    "evidenceRefList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/evidenceId"
+      }
+    },
+    "factRefList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/factId"
+      }
+    },
+    "unknownFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factId",
+        "state",
+        "value",
+        "reasonCode",
+        "reason",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "enum": [
+            "unknown",
+            "not_found",
+            "conflicting",
+            "not_applicable",
+            "withheld"
+          ]
+        },
+        "value": {
+          "type": "null"
+        },
+        "reasonCode": {
+          "enum": [
+            "not_published",
+            "not_found_after_search",
+            "conflicting_sources",
+            "not_applicable",
+            "withheld_by_business",
+            "insufficient_evidence"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 500
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "unknown"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reasonCode": {
+                "enum": ["not_published", "insufficient_evidence"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "not_found"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reasonCode": {
+                "const": "not_found_after_search"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "conflicting"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reasonCode": {
+                "const": "conflicting_sources"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "not_applicable"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reasonCode": {
+                "const": "not_applicable"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "withheld"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "reasonCode": {
+                "const": "withheld_by_business"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "verifiedString": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "const": "verified"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourcedString": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/verifiedString"
+        },
+        {
+          "$ref": "#/$defs/unknownFact"
+        }
+      ]
+    },
+    "verifiedUrl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "const": "verified"
+        },
+        "value": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourcedUrl": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/verifiedUrl"
+        },
+        {
+          "$ref": "#/$defs/unknownFact"
+        }
+      ]
+    },
+    "verifiedEmail": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "const": "verified"
+        },
+        "value": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 254
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourcedEmail": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/verifiedEmail"
+        },
+        {
+          "$ref": "#/$defs/unknownFact"
+        }
+      ]
+    },
+    "verifiedPhone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "const": "verified"
+        },
+        "value": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["display", "e164"],
+          "properties": {
+            "display": {
+              "type": "string",
+              "minLength": 7,
+              "maxLength": 32
+            },
+            "e164": {
+              "type": "string",
+              "pattern": "^\\+[1-9][0-9]{7,14}$"
+            }
+          }
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourcedPhone": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/verifiedPhone"
+        },
+        {
+          "$ref": "#/$defs/unknownFact"
+        }
+      ]
+    },
+    "verifiedAddress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "const": "verified"
+        },
+        "value": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "addressLine1",
+            "city",
+            "region",
+            "postalCode",
+            "countryCode"
+          ],
+          "properties": {
+            "addressLine1": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 160
+            },
+            "addressLine2": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "city": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 100
+            },
+            "region": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 80
+            },
+            "postalCode": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 16
+            },
+            "countryCode": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            }
+          }
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "verifiedGeoPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "const": "verified"
+        },
+        "value": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["latitude", "longitude"],
+          "properties": {
+            "latitude": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          }
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourcedGeoPoint": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/verifiedGeoPoint"
+        },
+        {
+          "$ref": "#/$defs/unknownFact"
+        }
+      ]
+    },
+    "verifiedHours": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "const": "verified"
+        },
+        "value": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 7,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["day", "closed", "intervals", "evidenceRefs"],
+            "properties": {
+              "day": {
+                "enum": [
+                  "monday",
+                  "tuesday",
+                  "wednesday",
+                  "thursday",
+                  "friday",
+                  "saturday",
+                  "sunday"
+                ]
+              },
+              "closed": {
+                "type": "boolean"
+              },
+              "intervals": {
+                "type": "array",
+                "maxItems": 3,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["opens", "closes"],
+                  "properties": {
+                    "opens": {
+                      "type": "string",
+                      "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+                    },
+                    "closes": {
+                      "type": "string",
+                      "pattern": "^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+                    }
+                  }
+                }
+              },
+              "evidenceRefs": {
+                "$ref": "#/$defs/evidenceRefList"
+              }
+            }
+          }
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourcedHours": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/verifiedHours"
+        },
+        {
+          "$ref": "#/$defs/unknownFact"
+        }
+      ]
+    },
+    "verifiedPalette": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+      "properties": {
+        "factId": {
+          "$ref": "#/$defs/factId"
+        },
+        "state": {
+          "const": "verified"
+        },
+        "value": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^#[A-Fa-f0-9]{6}$"
+          }
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourcedPalette": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/verifiedPalette"
+        },
+        {
+          "$ref": "#/$defs/unknownFact"
+        }
+      ]
+    },
+    "evidence": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/webEvidence"
+        },
+        {
+          "$ref": "#/$defs/documentEvidence"
+        },
+        {
+          "$ref": "#/$defs/humanEvidence"
+        },
+        {
+          "$ref": "#/$defs/internalEvidence"
+        }
+      ]
+    },
+    "webEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidenceId",
+        "kind",
+        "support",
+        "sourceClass",
+        "url",
+        "title",
+        "publisher",
+        "accessedAt",
+        "locator",
+        "observation",
+        "captureSha256"
+      ],
+      "properties": {
+        "evidenceId": {
+          "$ref": "#/$defs/evidenceId"
+        },
+        "kind": {
+          "const": "web_capture"
+        },
+        "support": {
+          "enum": ["direct", "context"]
+        },
+        "sourceClass": {
+          "enum": [
+            "official_business",
+            "official_social",
+            "government_registry",
+            "ordering_platform",
+            "review_platform",
+            "map_directory",
+            "licensed_provider",
+            "third_party"
+          ]
+        },
+        "url": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "accessedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1000
+        },
+        "captureSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "documentEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidenceId",
+        "kind",
+        "support",
+        "sourceClass",
+        "artifactId",
+        "filename",
+        "mimeType",
+        "capturedAt",
+        "locator",
+        "observation",
+        "contentSha256"
+      ],
+      "properties": {
+        "evidenceId": {
+          "$ref": "#/$defs/evidenceId"
+        },
+        "kind": {
+          "const": "document_capture"
+        },
+        "support": {
+          "enum": ["direct", "context"]
+        },
+        "sourceClass": {
+          "enum": [
+            "government_registry",
+            "client_supplied",
+            "licensed_provider",
+            "third_party"
+          ]
+        },
+        "artifactId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "mimeType": {
+          "enum": [
+            "application/pdf",
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/svg+xml",
+            "text/csv"
+          ]
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1000
+        },
+        "contentSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "humanEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidenceId",
+        "kind",
+        "support",
+        "sourceClass",
+        "eventId",
+        "subjectId",
+        "confirmedAt",
+        "channel",
+        "statement",
+        "eventReference",
+        "eventSha256"
+      ],
+      "properties": {
+        "evidenceId": {
+          "$ref": "#/$defs/evidenceId"
+        },
+        "kind": {
+          "const": "human_confirmation"
+        },
+        "support": {
+          "const": "direct"
+        },
+        "sourceClass": {
+          "const": "client_supplied"
+        },
+        "eventId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "subjectId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "confirmedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "channel": {
+          "enum": ["approval_ui", "signed_document", "verified_message"]
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1000
+        },
+        "eventReference": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "eventSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "internalEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidenceId",
+        "kind",
+        "support",
+        "sourceClass",
+        "recordType",
+        "recordId",
+        "observedAt",
+        "recordReference",
+        "observation",
+        "recordSha256"
+      ],
+      "properties": {
+        "evidenceId": {
+          "$ref": "#/$defs/evidenceId"
+        },
+        "kind": {
+          "const": "internal_record"
+        },
+        "support": {
+          "const": "context"
+        },
+        "sourceClass": {
+          "const": "internal_record"
+        },
+        "recordType": {
+          "enum": ["approval_queue", "prospect_history", "research_run"]
+        },
+        "recordId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recordReference": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 1000
+        },
+        "recordSha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateId",
+        "rank",
+        "searchRunId",
+        "searchArea",
+        "selectionScore",
+        "selectionReasons"
+      ],
+      "properties": {
+        "candidateId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "searchRunId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "searchArea": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label", "center", "radiusMiles"],
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 160
+            },
+            "center": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["city", "region", "countryCode"],
+              "properties": {
+                "city": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 100
+                },
+                "region": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 80
+                },
+                "countryCode": {
+                  "type": "string",
+                  "pattern": "^[A-Z]{2}$"
+                }
+              }
+            },
+            "radiusMiles": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "selectionScore": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "selectionReasons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["reason", "evidenceRefs"],
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 500
+              },
+              "evidenceRefs": {
+                "$ref": "#/$defs/evidenceRefList"
+              }
+            }
+          }
+        }
+      }
+    },
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "baseCommitSha",
+        "branchName",
+        "outputRepositoryName",
+        "pullRequestMode",
+        "packageManager",
+        "hostingProvider"
+      ],
+      "properties": {
+        "repository": {
+          "const": "alxyoq/restaurant-site-template"
+        },
+        "baseCommitSha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "branchName": {
+          "type": "string",
+          "pattern": "^agent/[a-z0-9][a-z0-9._-]{2,62}$"
+        },
+        "outputRepositoryName": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{2,62}$"
+        },
+        "pullRequestMode": {
+          "const": "draft"
+        },
+        "packageManager": {
+          "const": "npm"
+        },
+        "hostingProvider": {
+          "const": "netlify"
+        }
+      }
+    },
+    "executionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactPurpose",
+        "defaultBranchWriteAllowed",
+        "mergeAllowed",
+        "deployPreviewAllowed",
+        "productionDeployAllowed",
+        "publicLaunchAllowed",
+        "previewVisibility",
+        "searchIndexing",
+        "contactFormEnabled",
+        "newsletterEnabled",
+        "paymentConfigurationAllowed",
+        "customerContactAllowed",
+        "productionDomain",
+        "requiresSeparateLaunchApproval"
+      ],
+      "properties": {
+        "artifactPurpose": {
+          "enum": ["unpublished_sales_preview", "schema_validation_fixture"]
+        },
+        "defaultBranchWriteAllowed": {
+          "const": false
+        },
+        "mergeAllowed": {
+          "const": false
+        },
+        "deployPreviewAllowed": {
+          "type": "boolean"
+        },
+        "productionDeployAllowed": {
+          "const": false
+        },
+        "publicLaunchAllowed": {
+          "const": false
+        },
+        "previewVisibility": {
+          "const": "unlisted"
+        },
+        "searchIndexing": {
+          "const": "noindex_nofollow_noarchive"
+        },
+        "contactFormEnabled": {
+          "const": false
+        },
+        "newsletterEnabled": {
+          "const": false
+        },
+        "paymentConfigurationAllowed": {
+          "const": false
+        },
+        "customerContactAllowed": {
+          "const": false
+        },
+        "productionDomain": {
+          "type": "null"
+        },
+        "requiresSeparateLaunchApproval": {
+          "const": true
+        }
+      }
+    },
+    "business": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "displayName",
+        "legalName",
+        "category",
+        "operatingStatus",
+        "ownership",
+        "websiteAssessment"
+      ],
+      "properties": {
+        "displayName": {
+          "$ref": "#/$defs/verifiedString"
+        },
+        "legalName": {
+          "$ref": "#/$defs/sourcedString"
+        },
+        "category": {
+          "$ref": "#/$defs/verifiedString"
+        },
+        "operatingStatus": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+          "properties": {
+            "factId": {
+              "$ref": "#/$defs/factId"
+            },
+            "state": {
+              "const": "verified"
+            },
+            "value": {
+              "const": "operating"
+            },
+            "evidenceRefs": {
+              "$ref": "#/$defs/evidenceRefList"
+            },
+            "verifiedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "ownership": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt"],
+          "properties": {
+            "factId": {
+              "$ref": "#/$defs/factId"
+            },
+            "state": {
+              "const": "verified"
+            },
+            "value": {
+              "const": "independent"
+            },
+            "evidenceRefs": {
+              "$ref": "#/$defs/evidenceRefList"
+            },
+            "verifiedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "websiteAssessment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["factId", "state", "value", "evidenceRefs", "verifiedAt", "checkedAt"],
+          "properties": {
+            "factId": {
+              "$ref": "#/$defs/factId"
+            },
+            "state": {
+              "const": "verified"
+            },
+            "value": {
+              "enum": [
+                "none_confirmed",
+                "social_only",
+                "broken_or_parked",
+                "low_quality_existing"
+              ]
+            },
+            "evidenceRefs": {
+              "$ref": "#/$defs/evidenceRefList"
+            },
+            "verifiedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "checkedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phone", "email", "orderingUrl", "reservationUrl"],
+      "properties": {
+        "phone": {
+          "$ref": "#/$defs/sourcedPhone"
+        },
+        "email": {
+          "$ref": "#/$defs/sourcedEmail"
+        },
+        "orderingUrl": {
+          "$ref": "#/$defs/sourcedUrl"
+        },
+        "reservationUrl": {
+          "$ref": "#/$defs/sourcedUrl"
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primaryAddress", "coordinates", "weeklyHours"],
+      "properties": {
+        "primaryAddress": {
+          "$ref": "#/$defs/verifiedAddress"
+        },
+        "coordinates": {
+          "$ref": "#/$defs/sourcedGeoPoint"
+        },
+        "weeklyHours": {
+          "$ref": "#/$defs/sourcedHours"
+        }
+      }
+    },
+    "branding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observedBrandName", "observedPalette", "creativeDirection"],
+      "properties": {
+        "observedBrandName": {
+          "$ref": "#/$defs/sourcedString"
+        },
+        "observedPalette": {
+          "$ref": "#/$defs/sourcedPalette"
+        },
+        "creativeDirection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["basis", "palette", "mood", "typography", "rationale"],
+          "properties": {
+            "basis": {
+              "const": "human_approved_original"
+            },
+            "palette": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 8,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^#[A-Fa-f0-9]{6}$"
+              }
+            },
+            "mood": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 8,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 60
+              }
+            },
+            "typography": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 160
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 500
+            }
+          }
+        }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approvedClaims", "creativeCopyRules"],
+      "properties": {
+        "approvedClaims": {
+          "type": "array",
+          "maxItems": 40,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["claimId", "claimType", "text", "basisFactIds"],
+            "properties": {
+              "claimId": {
+                "type": "string",
+                "pattern": "^claim-[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "minLength": 7,
+                "maxLength": 96
+              },
+              "claimType": {
+                "enum": [
+                  "identity",
+                  "category",
+                  "location",
+                  "service",
+                  "specialty",
+                  "catering",
+                  "history",
+                  "accessibility",
+                  "other"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 800
+              },
+              "basisFactIds": {
+                "$ref": "#/$defs/factRefList"
+              }
+            }
+          }
+        },
+        "creativeCopyRules": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allowGenericInvitations",
+            "disallowUnsupportedSuperlatives",
+            "omitUnknownFacts"
+          ],
+          "properties": {
+            "allowGenericInvitations": {
+              "const": true
+            },
+            "disallowUnsupportedSuperlatives": {
+              "const": true
+            },
+            "omitUnknownFacts": {
+              "const": true
+            }
+          }
+        }
+      }
+    },
+    "socialProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "officialStatus", "url"],
+      "properties": {
+        "platform": {
+          "enum": [
+            "facebook",
+            "instagram",
+            "tiktok",
+            "youtube",
+            "x",
+            "linkedin",
+            "other"
+          ]
+        },
+        "officialStatus": {
+          "const": "verified_official"
+        },
+        "url": {
+          "$ref": "#/$defs/verifiedUrl"
+        }
+      }
+    },
+    "menu": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode", "reason", "evidenceRefs"],
+          "properties": {
+            "state": {
+              "enum": ["unknown", "not_found", "conflicting", "not_approved"]
+            },
+            "reasonCode": {
+              "enum": [
+                "not_published",
+                "not_found_after_search",
+                "conflicting_sources",
+                "not_approved_for_use",
+                "insufficient_evidence"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 500
+            },
+            "evidenceRefs": {
+              "$ref": "#/$defs/evidenceRefList"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "asOf", "sections"],
+          "properties": {
+            "state": {
+              "const": "verified"
+            },
+            "asOf": {
+              "type": "string",
+              "format": "date"
+            },
+            "sections": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 30,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["sectionId", "title", "items", "evidenceRefs"],
+                "properties": {
+                  "sectionId": {
+                    "$ref": "#/$defs/identifier"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  },
+                  "evidenceRefs": {
+                    "$ref": "#/$defs/evidenceRefList"
+                  },
+                  "items": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["itemId", "name", "evidenceRefs"],
+                      "properties": {
+                        "itemId": {
+                          "$ref": "#/$defs/identifier"
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160
+                        },
+                        "price": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 40
+                        },
+                        "description": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 500
+                        },
+                        "dietaryTags": {
+                          "type": "array",
+                          "maxItems": 12,
+                          "uniqueItems": true,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 60
+                          }
+                        },
+                        "evidenceRefs": {
+                          "$ref": "#/$defs/evidenceRefList"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "reviews": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "reasonCode", "reason", "evidenceRefs"],
+          "properties": {
+            "state": {
+              "enum": ["unknown", "not_found", "not_approved"]
+            },
+            "reasonCode": {
+              "enum": [
+                "not_published",
+                "not_found_after_search",
+                "not_approved_for_use",
+                "insufficient_evidence",
+                "rights_not_confirmed"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 500
+            },
+            "evidenceRefs": {
+              "$ref": "#/$defs/evidenceRefList"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "platform", "profileUrl", "evidenceRefs"],
+          "properties": {
+            "state": {
+              "const": "link_only"
+            },
+            "platform": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "profileUrl": {
+              "$ref": "#/$defs/httpsUrl"
+            },
+            "evidenceRefs": {
+              "$ref": "#/$defs/evidenceRefList"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "platform", "profileUrl", "evidenceRefs", "items"],
+          "properties": {
+            "state": {
+              "const": "licensed_excerpts"
+            },
+            "platform": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "profileUrl": {
+              "$ref": "#/$defs/httpsUrl"
+            },
+            "evidenceRefs": {
+              "$ref": "#/$defs/evidenceRefList"
+            },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "reviewId",
+                  "attribution",
+                  "excerpt",
+                  "sourceUrl",
+                  "rightsBasis",
+                  "evidenceRefs",
+                  "rightsEvidenceRefs"
+                ],
+                "properties": {
+                  "reviewId": {
+                    "$ref": "#/$defs/identifier"
+                  },
+                  "attribution": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "rating": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 5,
+                    "multipleOf": 0.1
+                  },
+                  "excerpt": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 240
+                  },
+                  "sourceUrl": {
+                    "$ref": "#/$defs/httpsUrl"
+                  },
+                  "rightsBasis": {
+                    "enum": [
+                      "reviewer_permission",
+                      "client_owned_testimonial",
+                      "platform_license",
+                      "client_confirmation_of_rights"
+                    ]
+                  },
+                  "evidenceRefs": {
+                    "$ref": "#/$defs/evidenceRefList"
+                  },
+                  "rightsEvidenceRefs": {
+                    "$ref": "#/$defs/evidenceRefList"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assetId",
+        "role",
+        "targetPath",
+        "sha256",
+        "provenance",
+        "rightsBasis",
+        "rightsNote",
+        "draftOnly",
+        "sourceReference",
+        "evidenceRefs",
+        "rightsEvidenceRefs"
+      ],
+      "properties": {
+        "assetId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "role": {
+          "enum": [
+            "logo",
+            "favicon",
+            "social_card",
+            "hero",
+            "about",
+            "gallery",
+            "catering",
+            "event",
+            "exterior",
+            "food"
+          ]
+        },
+        "targetPath": {
+          "type": "string",
+          "pattern": "^public/images/(?:brand|site)/[A-Za-z0-9][A-Za-z0-9._-]*\\.(?:avif|gif|ico|jpe?g|png|svg|webp)$",
+          "maxLength": 200
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "provenance": {
+          "enum": [
+            "owner_provided",
+            "licensed_stock",
+            "generated",
+            "draft_placeholder"
+          ]
+        },
+        "rightsBasis": {
+          "enum": [
+            "owner_confirmation",
+            "commercial_license",
+            "generated_for_preview",
+            "template_draft_only"
+          ]
+        },
+        "rightsNote": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 500
+        },
+        "draftOnly": {
+          "type": "boolean"
+        },
+        "sourceReference": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        },
+        "rightsEvidenceRefs": {
+          "$ref": "#/$defs/evidenceRefList"
+        }
+      }
+    },
+    "sitePlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pages", "features"],
+      "properties": {
+        "pages": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["home", "contact", "menu", "reviews", "gallery", "catering"],
+          "properties": {
+            "home": {
+              "const": true
+            },
+            "contact": {
+              "type": "boolean"
+            },
+            "menu": {
+              "type": "boolean"
+            },
+            "reviews": {
+              "type": "boolean"
+            },
+            "gallery": {
+              "type": "boolean"
+            },
+            "catering": {
+              "type": "boolean"
+            }
+          }
+        },
+        "features": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "orderingCta",
+            "reservationCta",
+            "contactForm",
+            "newsletter"
+          ],
+          "properties": {
+            "orderingCta": {
+              "type": "boolean"
+            },
+            "reservationCta": {
+              "type": "boolean"
+            },
+            "contactForm": {
+              "const": false
+            },
+            "newsletter": {
+              "const": false
+            }
+          }
+        }
+      }
+    },
+    "approvedPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate",
+        "template",
+        "executionPolicy",
+        "evidence",
+        "business",
+        "contact",
+        "location",
+        "branding",
+        "content",
+        "social",
+        "menu",
+        "reviews",
+        "assets",
+        "unresolved",
+        "sitePlan"
+      ],
+      "properties": {
+        "candidate": {
+          "$ref": "#/$defs/candidate"
+        },
+        "template": {
+          "$ref": "#/$defs/template"
+        },
+        "executionPolicy": {
+          "$ref": "#/$defs/executionPolicy"
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "business": {
+          "$ref": "#/$defs/business"
+        },
+        "contact": {
+          "$ref": "#/$defs/contact"
+        },
+        "location": {
+          "$ref": "#/$defs/location"
+        },
+        "branding": {
+          "$ref": "#/$defs/branding"
+        },
+        "content": {
+          "$ref": "#/$defs/content"
+        },
+        "social": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/socialProfile"
+          }
+        },
+        "menu": {
+          "$ref": "#/$defs/menu"
+        },
+        "reviews": {
+          "$ref": "#/$defs/reviews"
+        },
+        "assets": {
+          "type": "array",
+          "maxItems": 60,
+          "items": {
+            "$ref": "#/$defs/asset"
+          }
+        },
+        "unresolved": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["fieldPath", "reason"],
+            "properties": {
+              "fieldPath": {
+                "type": "string",
+                "pattern": "^/",
+                "minLength": 2,
+                "maxLength": 300
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 500
+              }
+            }
+          }
+        },
+        "sitePlan": {
+          "$ref": "#/$defs/sitePlan"
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "actor",
+        "approvalEventId",
+        "approvalEventReference",
+        "approvedAt",
+        "reviewedEvidenceIds",
+        "approvedPayloadSha256",
+        "signatureAlgorithm",
+        "signingKeyId",
+        "approvalSignature"
+      ],
+      "properties": {
+        "status": {
+          "enum": ["approved_for_draft_build", "fixture_only"]
+        },
+        "actor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "subjectId", "displayName"],
+          "properties": {
+            "kind": {
+              "enum": ["human", "fixture"]
+            },
+            "subjectId": {
+              "$ref": "#/$defs/identifier"
+            },
+            "displayName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          }
+        },
+        "approvalEventId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "approvalEventReference": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reviewedEvidenceIds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidenceId"
+          }
+        },
+        "approvedPayloadSha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "signatureAlgorithm": {
+          "const": "ed25519"
+        },
+        "signingKeyId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "approvalSignature": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9+/]{86}==$"
+        }
+      }
+    }
+  }
+}

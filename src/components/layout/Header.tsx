@@ -4,6 +4,7 @@ import { Facebook, Instagram, Menu, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+import previewPolicy from "@/config/preview-policy.json";
 import { siteConfig } from "@/config/site";
 
 export default function Header() {
@@ -98,7 +99,9 @@ export default function Header() {
               {label}
             </Link>
           ))}
-          {siteConfig.ordering.enabled && siteConfig.ordering.url ? (
+          {previewPolicy.orderingEnabled &&
+          siteConfig.ordering.enabled &&
+          siteConfig.ordering.url ? (
             <a
               href={siteConfig.ordering.url}
               target="_blank"
@@ -154,7 +157,9 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-          {siteConfig.ordering.enabled && siteConfig.ordering.url ? (
+          {previewPolicy.orderingEnabled &&
+          siteConfig.ordering.enabled &&
+          siteConfig.ordering.url ? (
             <a
               href={siteConfig.ordering.url}
               target="_blank"
