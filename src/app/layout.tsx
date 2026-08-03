@@ -1,26 +1,34 @@
 import type { Metadata } from "next";
 
+import previewPolicy from "@/config/preview-policy.json";
 import { siteConfig } from "@/config/site";
 
 import "./globals.css";
 
+const previewOrigin =
+  process.env.DEPLOY_PRIME_URL ?? process.env.URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.siteUrl),
+  metadataBase: new URL(
+    previewPolicy.publicLaunchAllowed ? siteConfig.siteUrl : previewOrigin,
+  ),
   title: {
     default: siteConfig.businessName,
     template: `%s | ${siteConfig.businessName}`,
   },
   description: siteConfig.description,
-  alternates: {
-    canonical: "/",
-  },
+  alternates: previewPolicy.publicLaunchAllowed
+    ? {
+        canonical: "/",
+      }
+    : undefined,
   icons: {
     icon: siteConfig.assets.favicon,
   },
   openGraph: {
     type: "website",
     locale: siteConfig.locale,
-    url: "/",
+    url: previewPolicy.publicLaunchAllowed ? "/" : undefined,
     siteName: siteConfig.businessName,
     title: siteConfig.businessName,
     description: siteConfig.description,
@@ -39,6 +47,20 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [siteConfig.assets.socialImage],
   },
+  robots:
+    previewPolicy.searchIndexing === "noindex_nofollow_noarchive"
+      ? {
+          index: false,
+          follow: false,
+          noarchive: true,
+          nocache: true,
+          googleBot: {
+            index: false,
+            follow: false,
+            noarchive: true,
+          },
+        }
+      : undefined,
 };
 
 export default function RootLayout({
@@ -65,9 +87,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <script type="application/ld+json">
-          {JSON.stringify(localBusinessSchema)}
-        </script>
+        {previewPolicy.publicLaunchAllowed ? (
+          <script type="application/ld+json">
+            {JSON.stringify(localBusinessSchema)}
+          </script>
+        ) : null}
         {children}
       </body>
     </html>

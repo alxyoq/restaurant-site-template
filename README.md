@@ -12,11 +12,48 @@ The template includes:
 - Configurable gallery with a keyboard-accessible lightbox
 - Centralized business details, hours, links, SEO, and social metadata
 - Centralized brand colors
-- Working Netlify contact and newsletter forms
+- Netlify contact and newsletter form implementations, disabled by the current
+  preview-only policy
 - Placeholder assets that are obvious and safe to replace
 - Netlify deployment configuration
 
-## Create a New Client Site
+## Automation foundation: fixture only
+
+This first automation milestone does not build or deploy sites for real
+businesses. It establishes and tests the contract needed for the future
+Qwen-to-Codex workflow without pretending that the production trust boundary
+already exists.
+
+The foundation currently includes:
+
+- a strict packet schema and semantic validator;
+- an Ed25519-authenticated synthetic fixture that exercises the validation and
+  approval-envelope path;
+- evidence, unknown-value, rights, provenance, and preview-policy fields for the
+  future production packet;
+- disabled contact/newsletter collection;
+- `noindex, nofollow, noarchive` metadata, robots policy, and Netlify header;
+- CI validation with no deployment permissions.
+
+It intentionally does **not** include a trusted production signing key or a
+deterministic packet-to-site generator. A digest stored inside a packet is not
+human authorization, and the current site source is not yet mechanically bound
+to packet contents. Therefore no real packet, client build, draft client PR, or
+deploy preview is authorized by this milestone.
+
+The planned workflow remains: Qwen researches and ranks businesses, a human
+approves selected evidence, a trusted orchestrator signs the approved production
+packet, and a deterministic generator lets Codex create a verified draft PR and
+unlisted Netlify preview. Production publication remains a separate later gate.
+
+See [`automation/README.md`](automation/README.md) for the exact trust boundary
+and activation requirements. This repository uses npm as its only package
+manager.
+
+## Manual Template Workflow
+
+The steps below describe manual use of the reusable template. They are not an
+automation authorization and do not activate the Qwen-to-Codex pipeline.
 
 After this repository is marked as a GitHub template:
 
@@ -27,6 +64,9 @@ After this repository is marked as a GitHub template:
 5. Complete the replacement checklist below.
 6. Run `npm run check` and `npm run build`.
 7. Deploy the new repository to Netlify.
+
+A human-led launch must separately review and change the preview policy before
+indexing, forms, or other production behavior is enabled.
 
 ## Replacement Checklist
 
@@ -123,8 +163,11 @@ remove, or reorder categories without editing the page component.
 
 ## Netlify Forms
 
-The contact and newsletter forms use Netlify Forms and redirect to
-`/thank-you` after submission.
+The contact and newsletter implementations use Netlify Forms and redirect to
+`/thank-you` after submission. The current automation foundation keeps both
+forms disabled through `src/config/preview-policy.json`; do not enable them for
+an automated preview. Form activation belongs to a separately approved launch
+workflow.
 
 After the first Netlify deploy:
 
@@ -141,9 +184,15 @@ Netlify dashboard.
 ```bash
 npm install
 npm run dev
+npm run validate:automation
+npm run test:automation
 npm run check
 npm run build
 ```
+
+The automation validation commands authenticate and validate the committed
+synthetic fixture only. They do not authorize a real build packet or generate a
+client website.
 
 Open [http://localhost:3000](http://localhost:3000) during development.
 

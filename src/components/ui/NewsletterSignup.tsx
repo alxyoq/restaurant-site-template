@@ -1,7 +1,8 @@
+import previewPolicy from "@/config/preview-policy.json";
 import { siteConfig } from "@/config/site";
 
 export default function NewsletterSignup() {
-  if (!siteConfig.newsletter.enabled) {
+  if (!siteConfig.newsletter.enabled || !previewPolicy.newsletterEnabled) {
     return null;
   }
 

@@ -1,0 +1,10 @@
+{
+  "mode": "unpublished_sales_preview",
+  "searchIndexing": "noindex_nofollow_noarchive",
+  "contactFormEnabled": false,
+  "newsletterEnabled": false,
+  "orderingEnabled": false,
+  "productionDeployAllowed": false,
+  "publicLaunchAllowed": false,
+  "requiresSeparateLaunchApproval": true
+}

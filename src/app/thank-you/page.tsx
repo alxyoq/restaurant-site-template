@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import Layout from "@/components/layout/Layout";
+import previewPolicy from "@/config/preview-policy.json";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata(
   "Thank You",
-  "Your message has been received.",
+  previewPolicy.contactFormEnabled
+    ? "Your message has been received."
+    : "This preview does not accept form submissions.",
   "/thank-you",
 );
 
@@ -17,8 +20,9 @@ export default function ThankYouPage() {
         <div className="content-card mx-auto max-w-2xl p-10 md:p-14">
           <h1 className="text-4xl text-brand-primary">Thank You</h1>
           <p className="mx-auto my-5 max-w-lg leading-7 text-gray-700">
-            Your submission was received. The restaurant will follow up using
-            the contact information you provided.
+            {previewPolicy.contactFormEnabled
+              ? "Your submission was received. The restaurant will follow up using the contact information you provided."
+              : "This draft preview does not accept form submissions."}
           </p>
           <Link href="/" className="btn-primary">
             Return Home

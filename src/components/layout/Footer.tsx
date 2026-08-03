@@ -2,6 +2,7 @@ import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import previewPolicy from "@/config/preview-policy.json";
 import { directionsUrl, siteConfig } from "@/config/site";
 
 export default function Footer() {
@@ -51,7 +52,9 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            {siteConfig.ordering.enabled && siteConfig.ordering.url ? (
+            {previewPolicy.orderingEnabled &&
+            siteConfig.ordering.enabled &&
+            siteConfig.ordering.url ? (
               <a
                 href={siteConfig.ordering.url}
                 target="_blank"
@@ -79,12 +82,14 @@ export default function Footer() {
               <Phone size={17} className="mr-2 shrink-0" />
               {siteConfig.contact.phoneDisplay}
             </a>
-            <Link
-              href="/contact"
-              className="mt-4 inline-flex text-brand-accent transition-colors hover:text-white"
-            >
-              Send a message <ArrowRight size={14} className="ml-1 mt-1" />
-            </Link>
+            {previewPolicy.contactFormEnabled ? (
+              <Link
+                href="/contact"
+                className="mt-4 inline-flex text-brand-accent transition-colors hover:text-white"
+              >
+                Send a message <ArrowRight size={14} className="ml-1 mt-1" />
+              </Link>
+            ) : null}
           </div>
         </div>
 
